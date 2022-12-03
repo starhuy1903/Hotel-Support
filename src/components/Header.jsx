@@ -47,9 +47,9 @@ const Header = () => {
   };
   return (
     // header
-    <div className="text-white bg-teal-500 flex justify-center relative">
+    <div className="text-white bg-teal-500 flex justify-center relative w-full">
       {/* headerContainer */}
-      <div className="px-4 md:px-8 xl:px-12 w-full max-w-5xl mt-5 mb-[100px]">
+      <div className="w-full max-w-5xl mt-5 mb-[100px]">
         {/* headerTitle */}
         <h1 className="text-4xl font-semibold">
           {" "}

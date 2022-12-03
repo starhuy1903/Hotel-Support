@@ -6,8 +6,14 @@ const MailList = () => {
         Sign up and we'll send the best deals to you
       </span>
       <div className="mailInputContainer">
-        <input type="text" placeholder="Your Email" className="w-[300px] h-[50px] p-3 border-none mr-3 rounded-md text-black outline-none" />
-        <button className="h-[50px] bg-teal-500 border-none rounded-md cursor-pointer p-3">Subscribe</button>
+        <input
+          type="text"
+          placeholder="Your Email"
+          className="w-[300px] h-[50px] p-3 border-none mr-3 rounded-md text-black outline-none"
+        />
+        <button className="h-[50px] bg-amber-500 border-none rounded-md cursor-pointer p-3">
+          Subscribe
+        </button>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import React from 'react'
 const Footer = () => {
   return (
     // footer
-    <div className="w-[1024px] text-xs">
+    <div className="w-[1024px] text-sm">
       {/* fLists */}
       <div className="w-full flex justify-between mb-12">
         {/* fList */}

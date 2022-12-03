@@ -11,7 +11,7 @@ const FeaturedProperties = () => {
         <span className="font-light">Madrid</span>
         <span className="fpPrice font-medium">Starting from $120</span>
         <div className="fpRating">
-          <button className="bg-teal-500 text-white border-none p-1 mr-3 font-bold">
+          <button className="bg-teal-600 text-white border-none p-1 mr-3 font-bold">
             8.9
           </button>
           <span className="text-sm">Excellent</span>
@@ -27,7 +27,7 @@ const FeaturedProperties = () => {
         <span className="font-light">Austin</span>
         <span className="font-medium">Starting from $140</span>
         <div className="fpRating">
-          <button className="bg-teal-500 text-white border-none p-1 mr-3 font-bold">
+          <button className="bg-teal-600 text-white border-none p-1 mr-3 font-bold">
             9.3
           </button>
           <span className="text-sm">Exceptional</span>
@@ -43,7 +43,7 @@ const FeaturedProperties = () => {
         <span className="font-light">Lisbon</span>
         <span className="font-medium">Starting from $99</span>
         <div className="fpRating">
-          <button className="bg-teal-500 text-white border-none p-1 mr-3 font-bold">
+          <button className="bg-teal-600 text-white border-none p-1 mr-3 font-bold">
             8.8
           </button>
           <span className="text-sm">Excellent</span>
@@ -59,7 +59,7 @@ const FeaturedProperties = () => {
         <span className="font-light">Berlin</span>
         <span className="font-medium">Starting from $105</span>
         <div className="fpRating">
-          <button className="bg-teal-500 text-white border-none p-1 mr-3 font-bold">
+          <button className="bg-teal-600 text-white border-none p-1 mr-3 font-bold">
             8.9
           </button>
           <span className="text-sm">Excellent</span>

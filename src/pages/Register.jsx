@@ -14,7 +14,7 @@ const schema = yup.object().shape({
   lastName: yup.string().required("This field is required"),
 });
 
-const RegisterPage = () => {
+const Register = () => {
   const [register, { isLoading }] = useRegisterMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -208,4 +208,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default Register;

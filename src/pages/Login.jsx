@@ -12,7 +12,7 @@ const schema = yup.object().shape({
   password: yup.string().required("This field is required"),
 });
 
-const LoginPage = () => {
+const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -151,4 +151,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;

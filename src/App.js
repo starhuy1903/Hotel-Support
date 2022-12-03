@@ -1,18 +1,18 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import RequireAuth from "./features/auth/RequireAuth";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         {/*  public routes*/}
-        <Route index element={<HomePage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
+        <Route index element={<Home />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
 
         {/*  protected routes*/}
         <Route element={<RequireAuth />}></Route>

@@ -5,11 +5,11 @@ const Navbar = () => {
   return (
     <section className="relative mx-auto">
       {/* navbar */}
-      <nav className="flex justify-between bg-teal-600 text-white w-screen">
-        <div className="px-5 xl:px-12 py-5 flex w-full items-center">
+      <nav className="flex justify-between bg-teal-600 text-white">
+        <div className="px-4 md:px-8 xl:px-12 py-5 flex w-full items-center">
           <Link className="text-3xl font-bold font-heading" to="/">
             <img
-              class="h-9"
+              className="h-9"
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdTzfG0hXnuSd2LB8q0fZ2dcJvfJ21DAbOIDkf_QO3xyT3NiQR578H8SraTnjmS7-HqxI&usqp=CAU"
               alt="logo"
             />

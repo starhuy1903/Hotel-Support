@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import RequireAuth from "./features/auth/RequireAuth";
 import Home from "./pages/Home";
+import HotelDetail from "./pages/HotelDetail";
 import HotelList from "./pages/HotelList";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -15,6 +16,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="hotels" element={<HotelList />} />
+        <Route path="hotels/:hotelId" element={<HotelDetail/>} />
 
         {/*  protected routes*/}
         <Route element={<RequireAuth />}></Route>

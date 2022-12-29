@@ -1,9 +1,18 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { useRegisterMutation } from "../features/auth/authApiSlice";
+import { useDispatch } from "react-redux";
+import { BeatLoader } from "react-spinners";
+import classNames from "classnames";
+import { setToken, setUser } from "../features/auth/authSlice";
+import {
+  useRegisterMutation,
+  useLoginMutation,
+  useLazyGetProfileQuery,
+} from "../features/auth/authApiSlice";
+
+import { toastError } from "../features/message";
 
 const schema = yup.object().shape({
   username: yup.string().required("This field is required"),
@@ -15,26 +24,31 @@ const schema = yup.object().shape({
 });
 
 const Register = () => {
-  const [register, { isLoading }] = useRegisterMutation();
+  const [register] = useRegisterMutation();
+  const [login] = useLoginMutation();
+  const { refetch: fetchUser } = useLazyGetProfileQuery();
+
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const handleSubmit = async (user) => {
     try {
-      const userData = await register(user).unwrap();
+      setIsLoading(true);
+      await register(user).unwrap();
+      const { accessToken } = await login(
+        user.username,
+        user.password
+      ).unwrap();
+      dispatch(setToken({ token: accessToken }));
+      const data = await fetchUser();
+      dispatch(setUser({ user: data }));
       navigate("/login");
     } catch (err) {
-      //   if (!err?.originalStatus) {
-      //     // isLoading: true until timeout occurs
-      //     setErrMsg("No Server Response");
-      //   } else if (err.originalStatus === 400) {
-      //     setErrMsg("Missing Username or Password");
-      //   } else if (err.originalStatus === 401) {
-      //     setErrMsg("Unauthorized");
-      //   } else {
-      //     setErrMsg("Login Failed");
-      //   }
-      //   errRef.current.focus();
+      toastError(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -46,14 +60,13 @@ const Register = () => {
       phoneNumber: "",
       firstName: "",
       lastName: "",
-      address: "",
+      // address: "",
     },
-    onSubmit: (user, { resetForm }) => {
+    onSubmit: (user) => {
       handleSubmit(user);
-      resetForm();
     },
     validationSchema: schema,
-    validateOnChange: false,
+    validateOnChange: true,
     validateOnBlur: true,
   });
 
@@ -86,6 +99,12 @@ const Register = () => {
                   onBlur={formik.handleBlur}
                   className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
+
+                {formik.touched.username && formik.errors.username && (
+                  <span className="text-red-700 text-sm">
+                    {formik.errors.username}
+                  </span>
+                )}
               </div>
               <div className="mt-6 md:mt-0 md:w-1/2 md:pl-2">
                 <label
@@ -95,6 +114,7 @@ const Register = () => {
                   Password
                 </label>
                 <input
+                  autoComplete=""
                   type="password"
                   name="password"
                   id="password"
@@ -103,6 +123,11 @@ const Register = () => {
                   onBlur={formik.handleBlur}
                   className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
+                {formik.touched.password && formik.errors.password && (
+                  <span className="text-red-700 text-sm">
+                    {formik.errors.password}
+                  </span>
+                )}
               </div>
               <div className="mt-6 md:w-1/2">
                 <label
@@ -120,6 +145,11 @@ const Register = () => {
                   onBlur={formik.handleBlur}
                   className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
+                {formik.touched.email && formik.errors.email && (
+                  <span className="text-red-700 text-sm">
+                    {formik.errors.email}
+                  </span>
+                )}
               </div>
               <div className="mt-6 md:w-1/2 md:pl-2">
                 <label
@@ -136,6 +166,11 @@ const Register = () => {
                   onBlur={formik.handleBlur}
                   className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
+                {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+                  <span className="text-red-700 text-sm">
+                    {formik.errors.phoneNumber}
+                  </span>
+                )}
               </div>
               <div className="mt-6 md:w-1/2">
                 <label
@@ -152,6 +187,12 @@ const Register = () => {
                   onBlur={formik.handleBlur}
                   className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
+
+                {formik.touched.firstName && formik.errors.firstName && (
+                  <span className="text-red-700 text-sm">
+                    {formik.errors.firstName}
+                  </span>
+                )}
               </div>
               <div className="mt-6 md:w-1/2 md:pl-2">
                 <label
@@ -168,8 +209,13 @@ const Register = () => {
                   onBlur={formik.handleBlur}
                   className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
+                {formik.touched.lastName && formik.errors.lastName && (
+                  <span className="text-red-700 text-sm">
+                    {formik.errors.lastName}
+                  </span>
+                )}
               </div>
-              <div className="mt-6 md:w-full">
+              {/* <div className="mt-6 md:w-full">
                 <label
                   htmlFor="address"
                   className="block mb-2 text-sm text-gray-600 dark:text-gray-200"
@@ -184,10 +230,19 @@ const Register = () => {
                   onBlur={formik.handleBlur}
                   className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
-              </div>
+              </div> */}
               <div className="mt-6 w-full">
-                <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-                  Sign up
+                <button
+                  disabled={!formik.isValid || isLoading}
+                  type="submit"
+                  className={classNames(
+                    "w-full px-4 py-2 tracking-wide flex items-center justify-center",
+                    formik.isValid
+                      ? " text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                      : " text-black transition-colors duration-200 transform bg-gray-500  "
+                  )}
+                >
+                  {!isLoading ? "Sign up" : <BeatLoader color="#000" />}
                 </button>
               </div>
             </form>

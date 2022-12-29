@@ -1,11 +1,14 @@
 import React from "react";
-
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../features/auth/authApiSlice";
-import { setCredentials } from "../features/auth/authSlice";
+import {
+  useLoginMutation,
+  useLazyGetProfileQuery,
+} from "../features/auth/authApiSlice";
+import { setToken, setUser } from "../features/auth/authSlice";
+import { toastError } from "../features/message";
 
 const schema = yup.object().shape({
   username: yup.string().required("This field is required"),
@@ -13,28 +16,20 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
-  const [login, { isLoading }] = useLoginMutation();
+  const [login] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [fetchUser] = useLazyGetProfileQuery();
 
   const handleSubmit = async (user) => {
     try {
-      const userData = await login(user).unwrap();
-      console.log(userData);
-      dispatch(setCredentials({ ...userData, user }));
+      const { accessToken } = await login(user).unwrap();
+      dispatch(setToken({ token: accessToken }));
+      const data = await fetchUser().unwrap();
+      dispatch(setUser({ user: data }));
       navigate("/");
     } catch (err) {
-      //   if (!err?.originalStatus) {
-      //     // isLoading: true until timeout occurs
-      //     setErrMsg("No Server Response");
-      //   } else if (err.originalStatus === 400) {
-      //     setErrMsg("Missing Username or Password");
-      //   } else if (err.originalStatus === 401) {
-      //     setErrMsg("Unauthorized");
-      //   } else {
-      //     setErrMsg("Login Failed");
-      //   }
-      //   errRef.current.focus();
+      toastError(err);
     }
   };
 
@@ -128,7 +123,7 @@ const Login = () => {
                   />
                 </div>
                 <div className="mt-6">
-                  <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                  <button type="submit" className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                     Sign in
                   </button>
                 </div>

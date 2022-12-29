@@ -11,8 +11,12 @@ import { format } from "date-fns";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import classNames from "classnames";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../features/auth/authSlice";
 
-const Header = ({type}) => {
+const Header = ({ type }) => {
+  const user = useSelector(selectCurrentUser);
+
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [date, setDate] = useState([
@@ -64,12 +68,14 @@ const Header = ({type}) => {
               Get rewarded for your travels – unlock instant savings of 10% or
               more with a free Hotel Reservation account
             </p>
-            <Link to="/login">
-              {/* headerBtn */}
-              <button className="bg-amber-500 font-medium border-none p-[10px] px-6 cursor-pointer rounded-md">
-                Sign in
-              </button>
-            </Link>
+            {!user && (
+              <Link to="/login">
+                {/* headerBtn */}
+                <button className="bg-amber-500 font-medium border-none p-[10px] px-6 cursor-pointer rounded-md">
+                  Sign in
+                </button>
+              </Link>
+            )}
             {/* headerSearch */}
             <div className="h-[50px] bg-white border-2 border-solid border-[#febb02] flex items-center justify-around py-[10px] rounded-md absolute -bottom-6  w-full max-w-5xl">
               {/* headerSearchItem */}

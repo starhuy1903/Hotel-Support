@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   faBed,
   faCalendarDays,
   faPerson,
+  faUsd,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DateRange } from "react-date-range";
@@ -14,6 +15,9 @@ import classNames from "classnames";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selectCurrentUser } from "../features/auth/authSlice";
+import { formatCurrency, generateLaterDate } from "../utils/library";
+import { LATER_DATE } from "../constant/date";
+import { MIN_PRICE, MAX_PRICE } from "../constant/price";
 
 const Header = ({ type }) => {
   const user = useSelector(selectCurrentUser);
@@ -23,15 +27,17 @@ const Header = ({ type }) => {
   const [date, setDate] = useState([
     {
       startDate: new Date(),
-      endDate: new Date(),
+      endDate: generateLaterDate(LATER_DATE),
       key: "selection",
     },
   ]);
-  const [openOptions, setOpenOptions] = useState(false);
+  const [openPriceOptions, setOpenPriceOptions] = useState(false);
+  const [openPeopleOptions, setOpenPeopleOptions] = useState(false);
+
   const [options, setOptions] = useState({
-    adult: 1,
-    children: 0,
-    room: 1,
+    minPrice: MIN_PRICE,
+    maxPrice: MAX_PRICE,
+    numPeople: 1,
   });
 
   const navigate = useNavigate();
@@ -45,14 +51,28 @@ const Header = ({ type }) => {
     });
   };
 
-  const handleSearch = () => {
+  const searchHandle = useCallback(() => {
     if (!destination) {
       toast.info("Please specify a destination");
       return;
     }
 
     navigate("/hotels", { state: { destination, date, options } });
-  };
+  }, [date, destination, navigate, options]);
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "Enter") {
+        searchHandle();
+      }
+    };
+    window.addEventListener("keyup", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keyup", handleKeyPress);
+    };
+  }, [searchHandle]);
+
   return (
     // header
     <div className="text-white bg-teal-500 flex justify-center relative w-full">
@@ -127,73 +147,97 @@ const Header = ({ type }) => {
                 <FontAwesomeIcon icon={faPerson} className="text-slate-500" />
                 {/* headerSearchText */}
                 <span
-                  onClick={() => setOpenOptions(!openOptions)}
+                  onClick={() => {
+                    setOpenPriceOptions(!openPriceOptions);
+                    setOpenPeopleOptions(false);
+                  }}
                   className="text-slate-500 cursor-pointer"
-                >{`${options.adult} adult · ${options.children} children · ${options.room} room`}</span>
-                {openOptions && (
+                >{`People: ${options.numPeople}`}</span>
+                {openPriceOptions && (
+                  <div className="z-[2] absolute top-[50px] bg-white text-gray-500 rounded-md shadow-[0px 0px 10px -5px rgba(0, 0, 0, 0.4)]">
+                    {/* optionItem */}
+
+                    <div className="w-[200px] flex justify-between m-[10px]">
+                      <span className="optionText">People</span>
+                      <div className="flex items-center gap-[10px] text-xs text-black">
+                        <button
+                          disabled={options.people <= 1}
+                          className="w-[30px] h-[30px] border border-solid border-[#0071c2] text-[#0071c2] cursor-pointer bg-white"
+                          onClick={() => handleOption("numPeople", "d")}
+                        >
+                          -
+                        </button>
+                        <span className="optionCounterNumber">
+                          {options.numPeople}
+                        </span>
+                        <button
+                          className="w-[30px] h-[30px] border border-solid border-[#0071c2] text-[#0071c2] cursor-pointer bg-white"
+                          onClick={() => handleOption("numPeople", "i")}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-[10px]">
+                {/* headerIcon */}
+                <FontAwesomeIcon icon={faUsd} className="text-slate-500" />
+                {/* headerSearchText */}
+                <span
+                  onClick={() => {
+                    setOpenPeopleOptions(!openPeopleOptions);
+                    setOpenPriceOptions(false);
+                  }}
+                  className="text-slate-500 cursor-pointer"
+                >{`From  ${formatCurrency(
+                  options.minPrice
+                )} to ${formatCurrency(options.maxPrice)}`}</span>
+                {openPeopleOptions && (
                   <div className="z-[2] absolute top-[50px] bg-white text-gray-500 rounded-md shadow-[0px 0px 10px -5px rgba(0, 0, 0, 0.4)]">
                     {/* optionItem */}
                     <div className="w-[200px] flex justify-between m-[10px]">
                       {/* optionText */}
-                      <span className="optionText">Adult</span>
+                      <span className="optionText">Min price</span>
                       {/* optionCounter */}
                       <div className="flex items-center gap-[10px] text-xs text-black">
                         {/* optionCounterButton */}
                         <button
-                          disabled={options.adult <= 1}
+                          disabled={options.minPrice <= 1}
                           className="w-[30px] h-[30px] border border-solid border-[#0071c2] text-[#0071c2] cursor-pointer bg-white"
-                          onClick={() => handleOption("adult", "d")}
+                          onClick={() => handleOption("minPrice", "d")}
                         >
                           -
                         </button>
                         <span className="optionCounterNumber">
-                          {options.adult}
+                          {options.minPrice}
                         </span>
                         <button
                           className="w-[30px] h-[30px] border border-solid border-[#0071c2] text-[#0071c2] cursor-pointer bg-white"
-                          onClick={() => handleOption("adult", "i")}
+                          onClick={() => handleOption("minPrice", "i")}
                         >
                           +
                         </button>
                       </div>
                     </div>
                     <div className="w-[200px] flex justify-between m-[10px]">
-                      <span className="optionText">Children</span>
+                      <span className="optionText">Max price</span>
                       <div className="flex items-center gap-[10px] text-xs text-black">
                         <button
-                          disabled={options.children <= 0}
+                          disabled={options.maxPrice <= 0}
                           className="w-[30px] h-[30px] border border-solid border-[#0071c2] text-[#0071c2] cursor-pointer bg-white"
-                          onClick={() => handleOption("children", "d")}
+                          onClick={() => handleOption("maxPrice", "d")}
                         >
                           -
                         </button>
                         <span className="optionCounterNumber">
-                          {options.children}
+                          {options.maxPrice}
                         </span>
                         <button
                           className="w-[30px] h-[30px] border border-solid border-[#0071c2] text-[#0071c2] cursor-pointer bg-white"
-                          onClick={() => handleOption("children", "i")}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                    <div className="w-[200px] flex justify-between m-[10px]">
-                      <span className="optionText">Room</span>
-                      <div className="flex items-center gap-[10px] text-xs text-black">
-                        <button
-                          disabled={options.room <= 1}
-                          className="w-[30px] h-[30px] border border-solid border-[#0071c2] text-[#0071c2] cursor-pointer bg-white"
-                          onClick={() => handleOption("room", "d")}
-                        >
-                          -
-                        </button>
-                        <span className="optionCounterNumber">
-                          {options.room}
-                        </span>
-                        <button
-                          className="w-[30px] h-[30px] border border-solid border-[#0071c2] text-[#0071c2] cursor-pointer bg-white"
-                          onClick={() => handleOption("room", "i")}
+                          onClick={() => handleOption("maxPrice", "i")}
                         >
                           +
                         </button>
@@ -206,7 +250,7 @@ const Header = ({ type }) => {
                 {/* headerBtn */}
                 <button
                   className="bg-amber-500 font-medium border-none p-[10px] cursor-pointer"
-                  onClick={handleSearch}
+                  onClick={searchHandle}
                 >
                   Search
                 </button>

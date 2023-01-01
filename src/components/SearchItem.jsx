@@ -1,4 +1,4 @@
-const SearchItem = () => {
+const SearchItem = ({ room }) => {
   return (
     <div className="searchItem border border-solid border-slate-300 p-[10px] flex justify-between gap-5 mb-5 rounded-md">
       <img

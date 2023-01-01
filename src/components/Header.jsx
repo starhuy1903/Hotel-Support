@@ -12,6 +12,7 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import classNames from "classnames";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { selectCurrentUser } from "../features/auth/authSlice";
 
 const Header = ({ type }) => {
@@ -45,6 +46,11 @@ const Header = ({ type }) => {
   };
 
   const handleSearch = () => {
+    if (!destination) {
+      toast.info("Please specify a destination");
+      return;
+    }
+
     navigate("/hotels", { state: { destination, date, options } });
   };
   return (

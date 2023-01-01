@@ -2,7 +2,11 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatCurrency } from "../utils/library";
 import { MOCK_HOTEL_IMAGE_URL } from "../constant/image";
-import { faPhone } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLocationDot,
+  faPhone,
+  faUsd,
+} from "@fortawesome/free-solid-svg-icons";
 
 const SearchItem = ({ hotel }) => {
   return (
@@ -26,24 +30,25 @@ const SearchItem = ({ hotel }) => {
           {hotel?.city ? hotel.city : "N/A"}
         </span>
         <span className="siSubtitle text-sm font-bold">
-          {hotel?.address ? hotel.address : "N/A"}
+          <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
+          <span>{hotel?.address ? hotel.address : "N/A"}</span>
+        </span>
+        <span className="siCancelOp text-sm font-bold">
+          <FontAwesomeIcon icon={faPhone} className="mr-2" />
+          <span>{hotel?.phone_number ? hotel.phone_number : "N/A"}</span>
         </span>
         <span className="siFeatures text-sm line-clamp-3 ">
           {hotel?.description ? hotel.description : "N/A"}
         </span>
-        <span className="siCancelOp text-sm  font-bold">
-          <FontAwesomeIcon icon={faPhone} className="mr-2" />
-          <span>{hotel?.phone_number ? hotel.phone_number : "N/A"}</span>
-        </span>
 
-        <div className="siDetailText flex flex-col gap-[5px] text-[#008009]">
-          <span className="siPrice text-xl">
+        <div className="siDetailText flex flex-col gap-[5px] text-[#008009] ">
+          <span className="siPrice text-xl font-bold">
             From{" "}
             {hotel?.cheapest_price
               ? formatCurrency(hotel?.cheapest_price)
               : "N/A"}{" "}
           </span>
-          <span className="siTaxOp text-sm text-slate-700">
+          <span className="siTaxOp text-sm text-gray-400">
             Includes taxes and fees
           </span>
           <button className="siCheckButton bg-amber-500 text-white font-bold py-[10px] px-[5px] border-none cursor-pointer rounded-md">

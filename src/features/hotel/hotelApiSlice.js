@@ -14,8 +14,17 @@ export const hotelApiSlice = apiSlice.injectEndpoints({
         url: "/hotel",
       }),
     }),
+
+    getHotelDetail: builder.query({
+      query: (id) => ({
+        url: `/hotel/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useLazyGetHotelWithFilterQuery, useLazyGetAllHotelsQuery } =
-  hotelApiSlice;
+export const {
+  useLazyGetHotelWithFilterQuery,
+  useLazyGetAllHotelsQuery,
+  useLazyGetHotelDetailQuery,
+} = hotelApiSlice;

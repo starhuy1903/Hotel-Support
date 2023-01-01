@@ -8,6 +8,7 @@ import HotelList from "./pages/HotelList";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
+import RoomList from "./pages/RoomList";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
         <Route path="reset-password" element={<ResetPassword />} />
         <Route path="hotels" element={<HotelList />} />
         <Route path="hotels/:hotelId" element={<HotelDetail />} />
-
+        <Route path="hotels/:hotelId/rooms" element={<RoomList />} />
         {/*  protected routes*/}
         <Route element={<RequireAuth />}></Route>
       </Route>

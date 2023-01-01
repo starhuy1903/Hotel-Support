@@ -2,13 +2,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatCurrency } from "../utils/library";
 import { MOCK_HOTEL_IMAGE_URL } from "../constant/image";
-import {
-  faLocationDot,
-  faPhone,
-  faUsd,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
-const SearchItem = ({ hotel }) => {
+const HotelItem = ({ hotel }) => {
   return (
     <div className=" searchItem border border-solid  border-slate-300 p-3 flex justify-between gap-5 mb-5 rounded-md">
       <div className="flex-grow-0 flex-shrink-0 w-[13rem] h-[13rem]">
@@ -20,12 +17,15 @@ const SearchItem = ({ hotel }) => {
         />
       </div>
       <div className="siDesc flex flex-col gap-[10px] flex-auto ">
-        <h1 className="siTitle text-xl font-bold text-teal-600 flex justify-between items-start">
+        <Link
+          to={`/hotels/${hotel?._id || hotel?.id}`}
+          className="siTitle text-xl font-bold text-teal-600 flex justify-between items-start"
+        >
           <span>{hotel ? hotel.name : "N/A"}</span>
           <button className="bg-teal-600 text-white p-[5px] font-bold border-none text-base">
             N/A
           </button>
-        </h1>
+        </Link>
         <span className="siTaxiOp text-sm bg-[#008009] text-white w-max p-1 rounded-md">
           {hotel?.city ? hotel.city : "N/A"}
         </span>
@@ -51,13 +51,16 @@ const SearchItem = ({ hotel }) => {
           <span className="siTaxOp text-sm text-gray-400">
             Includes taxes and fees
           </span>
-          <button className="siCheckButton bg-amber-500 text-white font-bold py-[10px] px-[5px] border-none cursor-pointer rounded-md">
+          <Link
+            to={`/hotels/${hotel?._id}/rooms`}
+            className="siCheckButton bg-amber-500 text-white font-bold py-[10px] px-[5px] border-none cursor-pointer rounded-md"
+          >
             See availability
-          </button>
+          </Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default SearchItem;
+export default HotelItem;

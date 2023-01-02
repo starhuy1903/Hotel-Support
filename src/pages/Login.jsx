@@ -38,12 +38,11 @@ const Login = () => {
       username: "",
       password: "",
     },
-    onSubmit: (user, { resetForm }) => {
+    onSubmit: (user) => {
       handleSubmit(user);
-      resetForm();
     },
     validationSchema: schema,
-    validateOnChange: false,
+    validateOnChange: true,
     validateOnBlur: true,
   });
 
@@ -96,11 +95,16 @@ const Login = () => {
                     onBlur={formik.handleBlur}
                     className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                   />
+                  {formik.touched.username && formik.errors.username && (
+                    <span className="text-red-700 text-sm">
+                      {formik.errors.username}
+                    </span>
+                  )}
                 </div>
                 <div className="mt-6">
                   <div className="flex justify-between mb-2">
                     <label
-                      htmlFor="password"
+                      htmlFor="paswsword"
                       className="text-sm text-gray-600 dark:text-gray-200"
                     >
                       Password
@@ -121,6 +125,11 @@ const Login = () => {
                     onBlur={formik.handleBlur}
                     className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                   />
+                  {formik.touched.password && formik.errors.password && (
+                    <span className="text-red-700 text-sm">
+                      {formik.errors.password}
+                    </span>
+                  )}
                 </div>
                 <div className="mt-6">
                   <button type="submit" className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">

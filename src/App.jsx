@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import RoomList from "./pages/RoomList";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -27,7 +28,9 @@ function App() {
         <Route path="hotels/:hotelId" element={<HotelDetail />} />
         <Route path="hotels/:hotelId/rooms" element={<RoomList />} />
         {/*  protected routes*/}
-        <Route element={<RequireAuth />}></Route>
+        <Route element={<RequireAuth />}>
+          <Route path="/me" element={<Profile />} />
+        </Route>
       </Route>
     </Routes>
   );

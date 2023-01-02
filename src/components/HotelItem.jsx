@@ -1,9 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatCurrency } from "../utils/library";
 import { MOCK_HOTEL_IMAGE_URL } from "../constant/image";
 import { faLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
 
 const HotelItem = ({ hotel }) => {
   return (
@@ -53,7 +53,7 @@ const HotelItem = ({ hotel }) => {
           </span>
           <Link
             to={`/hotels/${hotel?._id}/rooms`}
-            className="siCheckButton bg-amber-500 text-white font-bold py-[10px] px-[5px] border-none cursor-pointer rounded-md"
+            className="ml-auto siCheckButton bg-amber-500 text-white font-bold py-[10px] px-4 border-none cursor-pointer rounded-md"
           >
             See availability
           </Link>

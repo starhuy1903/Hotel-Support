@@ -7,7 +7,15 @@ export const roomApiSlice = apiSlice.injectEndpoints({
         url: `/hotel/${id}/room`,
       }),
     }),
+
+    bookRoom: builder.mutation({
+      query: (body) => ({
+        url: "reservation",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useLazyGetAllRoomsQuery } = roomApiSlice;
+export const { useLazyGetAllRoomsQuery, useBookRoomMutation } = roomApiSlice;

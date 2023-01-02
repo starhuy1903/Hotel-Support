@@ -2,7 +2,7 @@ import React from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   useLoginMutation,
   useLazyGetProfileQuery,
@@ -20,14 +20,22 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [fetchUser] = useLazyGetProfileQuery();
+  const { state } = useLocation();
 
   const handleSubmit = async (user) => {
+    const from = state?.from;
+
     try {
       const { accessToken } = await login(user).unwrap();
       dispatch(setToken({ token: accessToken }));
       const data = await fetchUser().unwrap();
       dispatch(setUser({ user: data }));
-      navigate("/");
+
+      if (!from || from.includes("/login") || from.includes("/register")) {
+        navigate("/");
+      } else {
+        navigate(from, { replace: true });
+      }
     } catch (err) {
       toastError(err);
     }
@@ -123,7 +131,10 @@ const Login = () => {
                   />
                 </div>
                 <div className="mt-6">
-                  <button type="submit" className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                  <button
+                    type="submit"
+                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                  >
                     Sign in
                   </button>
                 </div>

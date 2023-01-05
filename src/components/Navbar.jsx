@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useLogoutMutation } from "../features/auth/authApiSlice";
-import { logOut, selectCurrentToken } from "../features/auth/authSlice";
+import { logOut, selectCurrentToken, setToken } from "../features/auth/authSlice";
 import { toastError } from "../features/message";
 
 const Navbar = () => {
@@ -27,6 +27,7 @@ const Navbar = () => {
     try {
       await logout();
       dispatch(logOut());
+      dispatch(setToken({ token: null }));
     } catch (err) {
       toastError(err);
     }

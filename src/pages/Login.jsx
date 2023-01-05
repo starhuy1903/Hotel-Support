@@ -31,7 +31,7 @@ const Login = () => {
       const data = await fetchUser().unwrap();
       dispatch(setUser({ user: data }));
 
-      if (!from || from.includes("/login") || from.includes("/register")) {
+      if (!from || from?.includes("/login") || from.includes("/register")) {
         navigate("/");
       } else {
         navigate(from, { replace: true });

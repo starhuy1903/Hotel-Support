@@ -10,6 +10,9 @@ import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import RoomList from "./pages/RoomList";
 import Profile from "./pages/Profile";
+import Info from "./components/Profile/About";
+import Password from "./components/Profile/Password";
+import BookingHistory from "./components/Profile/BookingHistory";
 import RoomDetail from "./pages/RoomDetail";
 
 function App() {
@@ -32,7 +35,12 @@ function App() {
 
         {/*  protected routes*/}
         <Route element={<RequireAuth />}>
-          <Route path="/me" element={<Profile />} />
+          <Route path="/me" element={<Profile />}>
+            <Route index element={<Info />}/>
+            <Route exact path="password" element={<Password />} />
+            <Route exact path="history" element={<BookingHistory />} />
+            <Route path="*" element={<Info />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

@@ -14,13 +14,13 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import classNames from "classnames";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { selectCurrentUser } from "../features/auth/authSlice";
+import { selectCurrentToken } from "../features/auth/authSlice";
 import { formatCurrency, generateLaterDate } from "../utils/library";
 import { LATER_DATE } from "../constant/date";
 import { MIN_PRICE, MAX_PRICE } from "../constant/price";
 
 const Header = ({ type }) => {
-  const user = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
 
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
@@ -94,7 +94,7 @@ const Header = ({ type }) => {
               Get rewarded for your travels – unlock instant savings of 10% or
               more with a free Hotel Reservation account
             </p>
-            {!user && (
+            {!token && (
               <Link to="/login">
                 {/* headerBtn */}
                 <button className="bg-amber-500 font-medium border-none p-[10px] px-6 cursor-pointer rounded-md">

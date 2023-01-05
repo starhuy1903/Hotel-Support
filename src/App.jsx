@@ -13,6 +13,7 @@ import Profile from "./pages/Profile";
 import Info from "./components/Profile/About";
 import Password from "./components/Profile/Password";
 import BookingHistory from "./components/Profile/BookingHistory";
+import RoomDetail from "./pages/RoomDetail";
 
 function App() {
   return (
@@ -30,6 +31,8 @@ function App() {
         <Route path="hotels" element={<HotelList />} />
         <Route path="hotels/:hotelId" element={<HotelDetail />} />
         <Route path="hotels/:hotelId/rooms" element={<RoomList />} />
+        <Route path="hotels/:hotelId/rooms/:roomId" element={<RoomDetail />} />
+
         {/*  protected routes*/}
         <Route element={<RequireAuth />}>
           <Route path="/me" element={<Profile />}>

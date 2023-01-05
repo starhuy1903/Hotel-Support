@@ -19,7 +19,7 @@ const RoomItem = ({ room, handleBookingOnClick }) => {
         </div>
         <div className="siDesc flex flex-col gap-[10px] flex-auto justify-end">
           <Link
-            to={`/rooms/${room?._id || room?.id}`}
+            to={`/hotels/${room?.hotel?._id}/rooms/${room?._id || room?.id}`}
             className="siTitle text-xl font-bold text-teal-600 flex justify-between items-start"
           >
             <span>{room ? room.room_name : "N/A"}</span>

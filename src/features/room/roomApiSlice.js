@@ -15,7 +15,17 @@ export const roomApiSlice = apiSlice.injectEndpoints({
         body,
       }),
     }),
+
+    getRoomDetail: builder.query({
+      query: ({ hotelId, roomId }) => ({
+        url: `/hotel/${hotelId}/room/${roomId}`,
+      }),
+    }),
   }),
 });
 
-export const { useLazyGetAllRoomsQuery, useBookRoomMutation } = roomApiSlice;
+export const {
+  useLazyGetAllRoomsQuery,
+  useBookRoomMutation,
+  useLazyGetRoomDetailQuery,
+} = roomApiSlice;

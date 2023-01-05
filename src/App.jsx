@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import RoomList from "./pages/RoomList";
 import Profile from "./pages/Profile";
+import RoomDetail from "./pages/RoomDetail";
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
         <Route path="hotels" element={<HotelList />} />
         <Route path="hotels/:hotelId" element={<HotelDetail />} />
         <Route path="hotels/:hotelId/rooms" element={<RoomList />} />
+        <Route path="hotels/:hotelId/rooms/:roomId" element={<RoomDetail />} />
+
         {/*  protected routes*/}
         <Route element={<RequireAuth />}>
           <Route path="/me" element={<Profile />} />

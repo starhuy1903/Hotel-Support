@@ -1,18 +1,26 @@
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleArrowLeft,
   faCircleArrowRight,
   faCircleXmark,
   faLocationDot,
+  faPhone,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
 import Header from "../components/Header";
 import MailList from "../components/MailList";
 import Footer from "../components/Footer";
+import { useLazyGetHotelDetailQuery } from "../features/hotel/hotelApiSlice";
+import { toastError } from "../features/message";
+import { Link, useParams } from "react-router-dom";
+import { formatCurrency } from "../utils/library";
 
 const HotelDetail = () => {
+  const [getHotelDetail] = useLazyGetHotelDetailQuery();
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [hotel, setHotel] = useState();
+  const { hotelId } = useParams();
 
   const photos = [
     {
@@ -52,6 +60,18 @@ const HotelDetail = () => {
     setSlideNumber(newSlideNumber);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getHotelDetail(hotelId).unwrap();
+        setHotel(data);
+      } catch (err) {
+        toastError(err);
+      }
+    };
+    fetchData();
+  }, [getHotelDetail, hotelId]);
+
   return (
     <div className="hotelContainer flex flex-col items-center mt-5">
       {open && (
@@ -81,63 +101,58 @@ const HotelDetail = () => {
         </div>
       )}
       <div className="hotelWrapper w-full max-w-5xl flex flex-col gap-[10px] relative">
-        <button className="bookNow absolute top-[10px] right-0 border-none px-5 py-[10px] bg-amber-500 text-white font-bold rounded-md cursor-pointer">
-          Reserve or Book Now!
-        </button>
-        <h1 className="hotelTitle text-2xl">Tower Street Apartments</h1>
+        <h1 className="hotelTitle text-2xl">
+          {hotel?.name ? hotel.name : "N/A"}
+        </h1>
         <div className="hotelAddress text-sm flex items-center gap-[10px]">
           <FontAwesomeIcon icon={faLocationDot} />
-          <span>Elton St 125 New york</span>
+          <span> {hotel?.address ? hotel.address : "N/A"}</span>
         </div>
-        <span className="hotelDistance text-[#0071c2] font-medium">
-          Excellent location – 500m from center
-        </span>
-        <span className="hotelPriceHighlight text-[#008009] font-medium">
+        <div className="hotelAddress text-sm flex items-center gap-[10px]">
+          <FontAwesomeIcon icon={faPhone} />
+          <span> {hotel?.phone_number ? hotel.phone_number : "N/A"}</span>
+        </div>
+        {/* <span className="hotelPriceHighlight text-[#008009] font-medium">
           Book a stay over $114 at this property and get a free airport taxi
-        </span>
+        </span> */}
         <div className="hotelImages flex flex-wrap justify-between">
-          {photos.map((photo, i) => (
-            <div className="hotelImgWrapper w-[33%] mt-1" key={i}>
-              <img
-                onClick={() => handleOpen(i)}
-                src={photo.src}
-                alt=""
-                className="hotelImg w-full object-cover cursor-pointer"
-              />
-            </div>
-          ))}
+          {hotel?.photos &&
+            hotel.photos.map((photo, i) => (
+              <div className="hotelImgWrapper w-[33%] mt-1" key={i}>
+                <img
+                  onClick={() => handleOpen(i)}
+                  src={photo}
+                  alt=""
+                  className="hotelImg w-full object-cover cursor-pointer"
+                />
+              </div>
+            ))}
         </div>
         <div className="hotelDetails flex justify-between gap-5 mt-5">
           <div className="hotelDetailsTexts flex-[3]">
-            <h1 className="hotelTitle">Stay in the heart of City</h1>
-            <p className="hotelDesc text-sm mt-5">
-              Located a 5-minute walk from St. Florian's Gate in Krakow, Tower
-              Street Apartments has accommodations with air conditioning and
-              free WiFi. The units come with hardwood floors and feature a fully
-              equipped kitchenette with a microwave, a flat-screen TV, and a
-              private bathroom with shower and a hairdryer. A fridge is also
-              offered, as well as an electric tea pot and a coffee machine.
-              Popular points of interest near the apartment include Cloth Hall,
-              Main Market Square and Town Hall Tower. The nearest airport is
-              John Paul II International Kraków–Balice, 16.1 km from Tower
-              Street Apartments, and the property offers a paid airport shuttle
-              service.
-            </p>
+            <p className="hotelDesc text-sm mt-5">{hotel?.description}</p>
           </div>
           <div className="hotelDetailsPrice flex-1 bg-[#ebf3ff] p-5 flex flex-col gap-5">
-            <h1 className="text-lg text-slate-700">
-              Perfect for a 9-night stay!
-            </h1>
-            <span className="text-sm">
-              Located in the real heart of Krakow, this property has an
-              excellent location score of 9.8!
-            </span>
-            <h2 className="font-light">
-              <b>$945</b> (9 nights)
+            <span className="text-sm">On sale!</span>
+            <h2 className="font-light text-red-500">
+              <b className="line-through mr-2 ">
+                From{" "}
+                {formatCurrency(
+                  hotel?.cheapest_price + hotel?.cheapest_price * 0.2
+                )}
+              </b>
+              <b>(-20%)</b>
             </h2>
-            <button className="border-none px-5 py-[10px] bg-amber-500 text-white font-bold cursor-pointer rounded-md">
+            <h2 className=" text-teal-600 font-bold">
+              <b>From {formatCurrency(hotel?.cheapest_price)}</b>
+            </h2>
+
+            <Link
+              to={`/hotels/${hotel?._id}/rooms`}
+              className="border-none px-5 py-[10px] bg-amber-500 text-white font-bold cursor-pointer rounded-md"
+            >
               Reserve or Book Now!
-            </button>
+            </Link>
           </div>
         </div>
       </div>

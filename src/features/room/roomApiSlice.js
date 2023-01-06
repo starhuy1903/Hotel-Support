@@ -24,7 +24,7 @@ export const roomApiSlice = apiSlice.injectEndpoints({
     cancelReservation: builder.mutation({
       query: (id) => ({
         url: `/cancel/${id}`,
-        method: "DELTE",
+        method: "DELETE",
       })
     })
   }),
@@ -34,4 +34,5 @@ export const {
   useLazyGetAllRoomsQuery,
   useBookRoomMutation,
   useLazyGetRoomDetailQuery,
+  useCancelReservationMutation,
 } = roomApiSlice;

@@ -6,6 +6,8 @@ import { useLazyGetHistoryQuery } from "../../features/auth/authApiSlice";
 import { selectCurrentHistory, setHistory } from "../../features/auth/authSlice";
 import { useState } from "react";
 import { percentageFormatter, priceFormatter, timeFormatter } from "../../utils/intl";
+import { toast } from "react-toastify";
+import { useCancelReservationMutation } from '../../features/room/roomApiSlice';
 
 
 const BookingStatus = {
@@ -16,6 +18,7 @@ const BookingStatus = {
 }
 
 const BookingItem = ({
+  _id,
   hotelName,
   roomName,
   startDate,
@@ -25,16 +28,28 @@ const BookingItem = ({
   totalPrice,
   discountPercent,
 }) => {
-  const [bookingStatus, setBookingStatus] = useState(statusName);
+  const [bookingStatus, setBookingStatus] = useState(BookingStatus.PENDING); // TODO: remove mock
+  const [cancelReversation] = useCancelReservationMutation();
+
+  const handleCancelReversation = useCallback(async () => {
+    try {
+      const data = await cancelReversation(_id).unwrap();
+      toast.success(data.message);
+      setBookingStatus(BookingStatus.PENDING); // TODO: remove mock
+    } catch (err) {
+      toastError(err);
+      setBookingStatus(BookingStatus.PENDING); // TODO: remove mock
+    }
+  }, [_id, cancelReversation]);
   
   const cancelBtnProps = useMemo(() => 
     bookingStatus === BookingStatus.PENDING ? ({
       className: "w-36 rounded-sm py-1 text-white bg-rose-300 cursor-pointer",
-      onClick: () => setBookingStatus(false),
+      onClick: () => handleCancelReversation()
     }) : ({
       className: "w-36 rounded-sm py-1 text-gray-600 bg-gray-300 cursor-default",
       onClick: null,
-    }), [bookingStatus]);
+    }), [bookingStatus, handleCancelReversation]);
 
   return (
     <div className="flex flex-col px-4 mb-4 rounded-sm">

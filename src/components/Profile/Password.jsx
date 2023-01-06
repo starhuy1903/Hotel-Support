@@ -12,7 +12,6 @@ const Password = () => {
     async ({ oldPassword, newPassword }) => {
       try {
         const data = await updateProfile({ oldPassword, newPassword }).unwrap();
-        console.log(data);
         toast.success(data.message);
       } catch (err) {
         toastError(err);
@@ -51,7 +50,8 @@ const Password = () => {
   return (
     <div>
       <div className="mt-8">
-        <form onSubmit={formik.handleSubmit}>
+        <div className="px-4 text-2xl">Change password</div>
+        <form onSubmit={formik.handleSubmit} className="mt-12 px-4">
           <div className="mt-6">
             <div className="flex justify-between mb-2">
               <label

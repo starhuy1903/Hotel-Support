@@ -92,13 +92,13 @@ const Info = () => {
 
   return (
     <div>
-      <h1 className="text-4xl text-white justify-center font-semibold flex w-full py-8 bg-teal-500">
+      <h1 className="text-4xl justify-center items-center font-bold flex w-full h-36 text-teal-500">
         {profile['first_name']}
         {" "}
         {profile['last_name']}
       </h1>
-      <div className="mt-8">
-        <form onSubmit={formik.handleSubmit}>
+      <div>
+        <form onSubmit={formik.handleSubmit} className="mt-8 px-4">
           <div>
             <label
               htmlFor="first_name"

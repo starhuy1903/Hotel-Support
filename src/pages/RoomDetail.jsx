@@ -105,8 +105,6 @@ const RoomDetail = () => {
       }
     };
     if (hotelId && roomId) {
-      console.log(hotelId, roomId);
-
       fetchData();
     }
   }, [fetchRoomDetail, hotelId, roomId]);

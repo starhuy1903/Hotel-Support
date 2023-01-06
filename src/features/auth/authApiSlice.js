@@ -26,6 +26,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: { ...profile },
       })
     }),
+    getHistory: builder.query({
+      query: () => "user/history",
+    }),
     logout: builder.mutation({
       query: () => ({
         url: "auth/logout",
@@ -40,4 +43,5 @@ export const {
   useRegisterMutation, 
   useLazyGetProfileQuery, 
   useUpdateProfileMutation, 
+  useLazyGetHistoryQuery,
   useLogoutMutation } = authApiSlice;

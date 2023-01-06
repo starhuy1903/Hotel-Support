@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import NoAuth from "./components/NoAuth";
 import RequireAuth from "./components/RequireAuth";
@@ -36,10 +36,10 @@ function App() {
         {/*  protected routes*/}
         <Route element={<RequireAuth />}>
           <Route path="/me" element={<Profile />}>
-            <Route index element={<Info />}/>
+            <Route exact path="info" element={<Info />}/>
             <Route exact path="password" element={<Password />} />
             <Route exact path="history" element={<BookingHistory />} />
-            <Route path="*" element={<Info />} />
+            <Route path="*" element={<Navigate to="/me/info" replace />} />
           </Route>
         </Route>
       </Route>

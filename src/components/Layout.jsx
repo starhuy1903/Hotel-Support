@@ -21,7 +21,6 @@ const Layout = () => {
     async () => {
       try {
         const data = await getProfile().unwrap();
-        console.log(data)
         if (!data) {
           destroyUserData();
         } else {

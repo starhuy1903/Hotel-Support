@@ -13,16 +13,22 @@ const authSlice = createSlice({
       state.user = action.payload.user;
     },
 
+    setHistory: (state, action) => {
+      state.history = action.payload.history;
+    },
+
     logOut: (state) => {
       state.user = null;
       state.token = null;
+      localStorage.setItem('token', null);
     },
   },
 });
 
-export const { setToken, setUser, logOut } = authSlice.actions;
+export const { setToken, setUser, setHistory, logOut } = authSlice.actions;
 
 export default authSlice.reducer;
 
 export const selectCurrentUser = (state) => state.auth.user;
 export const selectCurrentToken = (state) => state.auth.token;
+export const selectCurrentHistory = (state) => state.auth.history;

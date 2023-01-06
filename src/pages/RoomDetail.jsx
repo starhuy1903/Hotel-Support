@@ -183,7 +183,7 @@ const RoomDetail = () => {
             <div className="roomDetailsTexts flex-[3]">
               <p className="roomDesc text-sm mt-5">{room?.description}</p>
             </div>
-            <div className="roomDetailsPrice flex-1 bg-[#ebf3ff] p-5 flex flex-col gap-5">
+            <div className="roomDetailsPrice flex-1 bg-[#ebf3ff] p-5 flex flex-col gap-5 items-start">
               <span className="text-sm">On sale!</span>
               <h2 className="font-light text-red-500">
                 <b className="line-through mr-2 ">

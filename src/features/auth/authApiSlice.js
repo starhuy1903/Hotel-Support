@@ -29,6 +29,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
     getHistory: builder.query({
       query: () => "user/history",
     }),
+    cancelReservation: builder.query({
+      query: () => "user/history",
+    }),
     logout: builder.mutation({
       query: () => ({
         url: "auth/logout",

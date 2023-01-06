@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLazyGetHistoryQuery } from "../../features/auth/authApiSlice";
 import { selectCurrentHistory, setHistory } from "../../features/auth/authSlice";
 import { useState } from "react";
+import { percentageFormatter, priceFormatter, timeFormatter } from "../../utils/intl";
 
 
 const BookingStatus = {
@@ -18,12 +19,14 @@ const BookingItem = ({
   hotelName,
   roomName,
   startDate,
+  endDate,
+  createdAt,
   statusName,
   totalPrice,
   discountPercent,
 }) => {
   const [bookingStatus, setBookingStatus] = useState(statusName);
-  const priceFormatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'USD' }).format;
+  
   const cancelBtnProps = useMemo(() => 
     bookingStatus === BookingStatus.PENDING ? ({
       className: "w-36 rounded-sm py-1 text-white bg-rose-300 cursor-pointer",
@@ -34,17 +37,29 @@ const BookingItem = ({
     }), [bookingStatus]);
 
   return (
-    <div className="flex flex-col px-4 mb-6 border-t border-gray-300">
+    <div className="flex flex-col px-4 mb-4 rounded-sm">
       <div className="flex flex-col justify-start">
-        <div className="text-lg mt-4 font-semibold">Hotel: {hotelName}</div>
-        <div className="text-gray-600 mt-2">
-          <div className="text-sm mt-1">Room: {roomName}</div>
-          <div className="text-sm mt-1">Start date: {startDate}</div>
-          <div className="text-sm mt-1">Price: {priceFormatter(totalPrice)}</div>
-          <div className="text-sm mt-1">{discountPercent} off</div>
-        </div>
+        <div className="text-lg mt-4 font-semibold">{hotelName}</div>
+        <table className="text-gray-600 mt-2 text-sm">
+          <tr className="font-semibold">
+            <td>Room</td>
+            <td>Booked at</td>
+            <td>From date</td>
+            <td>To date</td>
+            <td>Price</td>
+            <td>Discount</td>
+          </tr>
+          <tr>
+            <td width="10%">{roomName}</td>
+            <td width="20%">{timeFormatter(createdAt)}</td>
+            <td width="20%">{timeFormatter(startDate)}</td>
+            <td width="20%">{timeFormatter(endDate)}</td>
+            <td width="15%">{priceFormatter(totalPrice)}</td>
+            <td>{percentageFormatter(discountPercent)}</td>
+          </tr>
+        </table>
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end my-4">
         <button {...cancelBtnProps}>Cancel</button>
       </div>
     </div>

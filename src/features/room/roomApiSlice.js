@@ -21,6 +21,12 @@ export const roomApiSlice = apiSlice.injectEndpoints({
         url: `/hotel/${hotelId}/room/${roomId}`,
       }),
     }),
+    cancelReservation: builder.mutation({
+      query: (id) => ({
+        url: `/cancel/${id}`,
+        method: "DELTE",
+      })
+    })
   }),
 });
 
